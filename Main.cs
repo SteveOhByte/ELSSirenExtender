@@ -26,6 +26,7 @@ namespace ELSSirenExtender
         private static string config = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\LSPDFR\ELSSirenExtender\config.lc";
         private static bool enableSirenCutoff = true;
         private static bool enableFriendlyHonk = true;
+        private static bool enableYieldVehicles = true;
         private static bool enableLeaveEngineRunning = false;
 
         private static readonly Version assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
@@ -45,12 +46,14 @@ namespace ELSSirenExtender
                 File.Create(config).Close();
                 LC.WriteValue(config, "Cutoff siren when exiting vehicle", true);
                 LC.WriteValue(config, "AI-cops honk back to you", true);
+                LC.WriteValue(config, "AI vehicles go around when your lights are on", true);
                 LC.WriteValue(config, "Leave engine running when exiting vehicle", false);
             }
             else
             {
                 enableSirenCutoff = LC.ReadBool(config, "Cutoff siren when exiting vehicle");
                 enableFriendlyHonk = LC.ReadBool(config, "AI-cops honk back to you");
+                enableYieldVehicles = LC.ReadBool(config, "AI vehicles go around when your lights are on");
                 enableLeaveEngineRunning = LC.ReadBool(config, "Leave engine running when exiting vehicle");
             }
             
@@ -79,6 +82,8 @@ namespace ELSSirenExtender
                 GameFiber.StartNew(SirenCutoff.Start, "Siren Cutoff Fibre");
             if (enableFriendlyHonk)
                 GameFiber.StartNew(FriendlyHonk.Start, "Friendly Honk Fibre");
+            if (enableYieldVehicles)
+                GameFiber.StartNew(YieldVehicles.Start, "Yield Vehicles Fibre");
             if (enableLeaveEngineRunning)
                 GameFiber.StartNew(LeaveEngineRunning.Start, "Leave Engine Running Fibre");
             

@@ -13,3 +13,18 @@ C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\ELSSirenExtender\ob
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\ELSSirenExtender\obj\Debug\ELSSiren.C0FB68A0.Up2Date
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\ELSSirenExtender\obj\Debug\ELSSirenExtender.dll
 C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\ELSSirenExtender\obj\Debug\ELSSirenExtender.pdb
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\ELSSirenExtender.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\ELSSirenExtender.pdb
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\LiteConfig.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\LSPD First Response.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\OhPluginEssentials.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\RagePluginHookSDK.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\LSPD First Response.pdb
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\OhPluginEssentials.dll.config
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\bin\Debug\RagePluginHookSDK.xml
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\obj\Debug\ELSSirenExtender.csproj.AssemblyReference.cache
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\obj\Debug\ELSSirenExtender.csproj.CoreCompileInputs.cache
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\obj\Debug\ELSSiren.C0FB68A0.Up2Date
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\obj\Debug\ELSSirenExtender.dll
+C:\Users\miste\Desktop\Bugs Bunny's Pocket\Active production\LSPDFR Modding\ELSSirenExtender\obj\Debug\ELSSirenExtender.pdb
