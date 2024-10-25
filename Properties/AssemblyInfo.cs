@@ -31,10 +31,10 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.2")]
-[assembly: AssemblyFileVersion("1.0.2")]
+[assembly: AssemblyVersion("1.0.4")]
+[assembly: AssemblyFileVersion("1.0.4")]
 
 [assembly: AssemblyMetadata("UpdateBuddy-ModName", "ELSSirenExtender")]
 [assembly: AssemblyMetadata("UpdateBuddy-UpdateUrl", "https://www.dl.dropboxusercontent.com/scl/fi/wt4enro24u9jq8sm60o8l/Update.zip?rlkey=5vvtuwkt3cjy3p5f1lsueo2nz&st=6jmyau3d&dl=0")]
 [assembly: AssemblyMetadata("UpdateBuddy-VersionUrl", "https://www.dl.dropboxusercontent.com/scl/fi/edr9zfh0z39sd0l4qhkqo/version.txt?rlkey=y1574kitv1scx4sqjbsi5dfry&st=7rjjib5o&dl=0")]
-[assembly: AssemblyMetadata("UpdateBuddy-Version", "1.0.2")]
+[assembly: AssemblyMetadata("UpdateBuddy-Version", "1.0.4")]

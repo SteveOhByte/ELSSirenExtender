@@ -11,15 +11,14 @@ namespace ELSSirenExtender
             {
                 if (DetectedPlayerExiting())
                 {
-                    InputSimulator.KeyPress(Main.firstSirenKey);
-                    
-                    GameFiber.Sleep(10);
-                    
-                    InputSimulator.KeyPress(Main.secondSirenKey);
-                    
-                    GameFiber.Sleep(10);
-                    
-                    InputSimulator.KeyPress(Main.secondSirenKey);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (Input.IsGamepadConnected())
+                            Input.DPadPress(Input.Direction.LEFT);
+                        else
+                            Input.KeyPress(Main.lightStageKey);
+                        GameFiber.Sleep(10);
+                    }
                 }
                 GameFiber.Yield();
             }       

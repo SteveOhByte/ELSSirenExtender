@@ -16,8 +16,7 @@ namespace ELSSirenExtender
     public class Main : Plugin
     {
         private static Logger Logger;
-        public static Keys firstSirenKey = Keys.D1;
-        public static Keys secondSirenKey = Keys.D2;
+        public static Keys lightStageKey = Keys.J;
         public static Keys hornKey = Keys.E;
         public static Keys yelpKey = Keys.R;
         public static ControllerButtons hornButton = ControllerButtons.LeftThumb;
@@ -65,18 +64,19 @@ namespace ELSSirenExtender
                 return;
             }
             
-            string[] lines = File.ReadAllLines(elsIniFile);
-            foreach (string line in lines)
-            {
-                if (line.StartsWith("Snd_SrnTon1"))
-                    firstSirenKey = (Keys)int.Parse(line.Split('=')[1]);
-                if (line.StartsWith("Snd_SrnTon2"))
-                    secondSirenKey = (Keys)int.Parse(line.Split('=')[1]);
-                if (line.StartsWith("Sound_Ahorn"))
-                    hornKey = (Keys)int.Parse(line.Split('=')[1]);
-                if (line.StartsWith("Sound_Manul"))
-                    yelpKey = (Keys)int.Parse(line.Split('=')[1]);
-            }
+            IniReader iniReader = new IniReader(elsIniFile);
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Toggle_LSTG", "74"), out int lightStageKeyInt))
+                Logger.Error("Invalid value for Toggle_LSTG in ELS.ini. Defaulting to 74.");
+
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Horn", "87"), out int hornKeyInt))
+                Logger.Error("Invalid value for Sound_Horn in ELS.ini. Defaulting to 87.");
+            
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Manul", "84"), out int yelpKeyInt))
+                Logger.Error("Invalid value for Sound_Manul in ELS.ini. Defaulting to 84.");
+
+            lightStageKey = (Keys)lightStageKeyInt;
+            hornKey = (Keys)hornKeyInt;
+            yelpKey = (Keys)yelpKeyInt;
 
             if (enableSirenCutoff)
                 GameFiber.StartNew(SirenCutoff.Start, "Siren Cutoff Fibre");
@@ -133,15 +133,33 @@ namespace ELSSirenExtender
         private bool LCNotAssociated()
         {
             string extension = ".lc";
-            Dictionary<string, RegistryKey> registryBasePaths = new Dictionary<string, RegistryKey> {
-                { @"Software\Classes\" + extension, Registry.CurrentUser },
-                { @"Software\Classes\" + extension, Registry.LocalMachine },
-                { extension, Registry.ClassesRoot }
+            // Use HashSet to avoid adding duplicate keys.
+            HashSet<string> registryBasePaths = new HashSet<string> {
+                @"Software\Classes\" + extension,
             };
 
-            foreach (KeyValuePair<string, RegistryKey> item in registryBasePaths)
+            foreach (string registryPath in registryBasePaths)
             {
-                using (RegistryKey key = item.Value.OpenSubKey(item.Key))
+                // Check Registry.CurrentUser
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(registryPath))
+                {
+                    if (key != null)
+                    {
+                        return false;  // Association exists
+                    }
+                }
+        
+                // Check Registry.LocalMachine
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+                {
+                    if (key != null)
+                    {
+                        return false;  // Association exists
+                    }
+                }
+
+                // Check Registry.ClassesRoot
+                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(registryPath))
                 {
                     if (key != null)
                     {
