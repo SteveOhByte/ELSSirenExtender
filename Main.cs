@@ -35,6 +35,9 @@ namespace ELSSirenExtender
         private const float associationWaitTime = 15.0f;
         private float associationWaitTimer = 0.0f;
         
+        private string elsIniFile = AppDomain.CurrentDomain.BaseDirectory + @"\ELS.ini";
+        private string dlsIniFile = AppDomain.CurrentDomain.BaseDirectory + @"\plugins\DLS.ini";
+        
         public override void Initialize()
         {
             Game.LogTrivial("ELSSirenExtender Initializing...");
@@ -56,27 +59,32 @@ namespace ELSSirenExtender
                 enableLeaveEngineRunning = LC.ReadBool(config, "Leave engine running when exiting vehicle");
             }
             
-            string elsIniFile = AppDomain.CurrentDomain.BaseDirectory + @"\ELS.ini";
-            if (!File.Exists(elsIniFile))
+            // Check the cases: 1) Only ELS.ini exists, 2) Only DLS.ini exists, 3) Both exist (prefer ELS.ini), 4) Neither exist
+            // Case 1:
+            if (File.Exists(elsIniFile) && !File.Exists(dlsIniFile))
             {
-                Logger.Error("ELS.ini not found! Is ELS installed?");
-                Notification.DisplayNotification(TimeSpan.FromSeconds(15), Color.FromArgb(150, 100, 0, 0), "ELSSirenExtender", "Error", "ELS.ini not found!");
+                // Only ELS.ini exists
+                SetupELSBindings();
+            }
+            // Case 2:
+            else if (!File.Exists(elsIniFile) && File.Exists(dlsIniFile))
+            {
+                // Only DLS.ini exists
+                SetupDLSBindings();
+            }
+            // Case 3:
+            else if (File.Exists(elsIniFile) && File.Exists(dlsIniFile))
+            {
+                // Both exist, prefer ELS.ini
+                SetupELSBindings();
+            }
+            // Case 4:
+            else
+            {
+                Logger.Error("Neither ELS.ini nor DLS.ini found! Is ELS or DLS installed?");
+                Notification.DisplayNotification(TimeSpan.FromSeconds(15), Color.FromArgb(150, 100, 0, 0), "ELSSirenExtender", "Error", "Neither ELS.ini nor DLS.ini found!");
                 return;
             }
-            
-            IniReader iniReader = new IniReader(elsIniFile);
-            if (!int.TryParse(iniReader.GetString("CONTROL", "Toggle_LSTG", "74"), out int lightStageKeyInt))
-                Logger.Error("Invalid value for Toggle_LSTG in ELS.ini. Defaulting to 74.");
-
-            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Horn", "87"), out int hornKeyInt))
-                Logger.Error("Invalid value for Sound_Horn in ELS.ini. Defaulting to 87.");
-            
-            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Manul", "84"), out int yelpKeyInt))
-                Logger.Error("Invalid value for Sound_Manul in ELS.ini. Defaulting to 84.");
-
-            lightStageKey = (Keys)lightStageKeyInt;
-            hornKey = (Keys)hornKeyInt;
-            yelpKey = (Keys)yelpKeyInt;
 
             if (enableSirenCutoff)
                 GameFiber.StartNew(SirenCutoff.Start, "Siren Cutoff Fibre");
@@ -97,6 +105,40 @@ namespace ELSSirenExtender
                 associationPrompt = Prompt.DisplayPrompt("Press ~y~Y ~w~to connect .lc", "files to Notepad", TimeSpan.FromSeconds(associationWaitTime));
                 GameFiber.StartNew(AssociateFiles);
             }
+        }
+
+        private void SetupELSBindings()
+        {
+            IniReader iniReader = new IniReader(elsIniFile);
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Toggle_LSTG", "74"), out int lightStageKeyInt))
+                Logger.Error("Invalid value for Toggle_LSTG in ELS.ini. Defaulting to 74.");
+
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Horn", "87"), out int hornKeyInt))
+                Logger.Error("Invalid value for Sound_Horn in ELS.ini. Defaulting to 87.");
+            
+            if (!int.TryParse(iniReader.GetString("CONTROL", "Sound_Manul", "84"), out int yelpKeyInt))
+                Logger.Error("Invalid value for Sound_Manul in ELS.ini. Defaulting to 84.");
+
+            lightStageKey = (Keys)lightStageKeyInt;
+            hornKey = (Keys)hornKeyInt;
+            yelpKey = (Keys)yelpKeyInt;
+        }
+
+        private void SetupDLSBindings()
+        {
+            IniReader iniReader = new IniReader(dlsIniFile);
+            if (!char.TryParse(iniReader.GetString("Keyboard", "LightStage", "J"), out char lightStageKeyChar))
+                Logger.Error("Invalid value for LightStage in DLS.ini. Defaulting to J.");
+            
+            if (!char.TryParse(iniReader.GetString("Keyboard", "Horn", "Y"), out char hornKeyChar))
+                Logger.Error("Invalid value for Horn in DLS.ini. Defaulting to Y.");
+            
+            if (!char.TryParse(iniReader.GetString("Keyboard", "Manual", "T"), out char yelpKeyChar))
+                Logger.Error("Invalid value for Manual in DLS.ini. Defaulting to T.");
+            
+            lightStageKey = (Keys)Enum.Parse(typeof(Keys), lightStageKeyChar.ToString(), true);
+            hornKey = (Keys)Enum.Parse(typeof(Keys), hornKeyChar.ToString(), true);
+            yelpKey = (Keys)Enum.Parse(typeof(Keys), yelpKeyChar.ToString(), true);
         }
         
         private void AssociateFiles()

@@ -71,7 +71,7 @@ namespace ELSSirenExtender
         // Just gets the time stamp for the log file.
         private string Time()
         {
-            return DateTime.Now.ToString().Split(' ')[1] + " " + DateTime.Now.ToString().Split(' ')[2];
+            return DateTime.Now.ToString("h:mm:ss tt");
         }
 
         // This is the main method that writes a new log
